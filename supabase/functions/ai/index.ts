@@ -60,8 +60,8 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       Current insights are the current state of the user - right now or today.
       Previous insights are the previous state of the user -  weeks or a month.
 
-      Insights can be thoughts, feelings, or behaviors that the user has expressed in the text. They can be positive or negative, and they can be about anything that the user has mentioned in the text.
-      Insights should always have a timestamp, which is the date and time when the insight was generated. The timestamp should be in ISO 8601 format.
+      Insights can be thoughts, feelings , behaviors or information that the user has expressed in the text.
+      Insights should always have a timestamp, The timestamp should be in ISO 8601 format.
       
       Current Time: ${new Date().toISOString()}
 
@@ -99,7 +99,7 @@ async function handleRequest({req, user}:{req:Request, user:User}){
   const messages: Message[] = [
     { 
       role: "system",
-      content: `You are a help assistant and a companion to help the user in life and help them grow.`
+      content: `You are a help assistant and a companion to help the user in life and help them grow. You talk like a human companion`
     }
   ]
   if (profileData.data) {
