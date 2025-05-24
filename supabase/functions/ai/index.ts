@@ -68,11 +68,13 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       Insights should always have a timestamp, The timestamp should be in ISO 8601 format.
       The way, frequency and retaining of the insights can be different for each user, it's about personalization.
       
-      Current insights are the current state of the user - mostly about right now or today.
+      Current insights are the current state of the user - mostly insights about right now or today.
+      If older insights are still relevant, they can be kept in current insights, else they should be moved to previous insights.
       Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
 
       Overtime distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
       Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
+      Very old and non related insights can be removed if they are not useful anymore in a long term.
       Timestamps provide important contexts too.
       
       Response should be just a JSON object with the following format:
@@ -94,7 +96,8 @@ async function generateInsights(content: string, user: User, previousInsights?: 
         Currently said:${content}. 
         This is the conversation with the user, use conversation context from "current insights" if needed using timestamps and topics.
         
-        Update facts, previous/current insights as needed.
+        Update facts, previous/current insights as previously needed.
+        
         Current Time: ${new Date().toISOString()}
 
         Response should be JSON object with no other text.
