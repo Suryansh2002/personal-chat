@@ -74,7 +74,7 @@ async function generateInsights(content: string, user: User, previousInsights?: 
 
       Overtime distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
       Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
-      Very old and non related insights can be removed if they are not useful anymore in a long term.
+      Very old and non-relevant insights can be removed if they are not useful anymore in a long term.
       Timestamps provide important contexts too.
       
       Response should be just a JSON object with the following format:
