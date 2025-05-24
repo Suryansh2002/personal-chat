@@ -61,19 +61,21 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       You are a human behavior analyst. You are given a text and you need to generate insights and facts from it. You should only return the insights in JSON format. Do not add any other text.
       
       Facts are what defines the user - personal details, strong preferences, behaviorial patterns, likings, habits, thinking patterns etc...
-      Current insights are the current state of the user - right now or today.
-      Previous insights are the previous state of the user -  weeks or a month.
+      insights can also influence the facts if they have patterns or have useful information.
+      Retain as much facts as possible.
+      
+      Current insights are the current state of the user - mostly about right now or today.
+      Previous insights are the previous state of the user - distilled insights mostly about weeks, month.
 
       Insights can be thoughts, feelings , behaviors or information that the user has expressed in the text.
       Insights should always have a timestamp, The timestamp should be in ISO 8601 format.
+      The way, frequency and retaining of the insights can be different for each user, it's about personalization.
       
-      Current Time: ${new Date().toISOString()}
-
       Response should be just a JSON object with the following format:
       {
          "facts": Object,
-         "current_insights": Object[],
-         "previous_insights": Object[]
+         "current_insights": {thought:string, behaviour?:string, useful_information?:string timestamp:string}[],
+         "previous_insights": {thought:string, behaviour?:string, useful_information?:string timestamp:string}[]
       }
       `,
     },
@@ -84,8 +86,13 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       ...messages,
       {
         role: "user",
-        content: `${prevInsightText} Currently said:${content} Generate insights using previous insights and currently said.
+        content: `${prevInsightText}
+        Currently said:${content}. 
+        This is the conversation with the user.
+        
+        Generate insights using previous insights and currently said.
         Update the previous/current insights as needed, remove less informational or obsolete insights.
+        Current Time: ${new Date().toISOString()}
 
         Response should be JSON object with no other text.
         `
@@ -136,14 +143,17 @@ async function handleCompletion({req, user}:{req:Request, user:User}){
   if (profileData.data) {
     messages.push({
       role: "system",
-      content: `Previous Insights about user: ${profileData.data.insight}`
+      content: `
+        Previous Insights about user: ${profileData.data.insight} Current time: ${new Date().toISOString()}
+        Insights are timestamped, Time and Events matter a lot.
+        `
+
     })
   }
 
   const { content, chat_id, prevMessages }:{prevMessages:Message[], content:string, chat_id:string} = await req.json();
   messages.push(...prevMessages)
 
-  // count the number of chats from user
   const { data: chatCount } = await supabase
     .from("chat")
     .select("*", { count: "exact" })
