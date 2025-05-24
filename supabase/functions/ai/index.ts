@@ -63,19 +63,23 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       Facts are what defines the user - personal details, strong preferences, behaviorial patterns, likings, habits, thinking patterns etc...
       insights can also influence the facts if they have patterns or have useful information.
       Retain as much facts as possible.
-      
-      Current insights are the current state of the user - mostly about right now or today.
-      Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
 
       Insights can be thoughts, feelings , behaviors or information that the user has expressed in the text.
       Insights should always have a timestamp, The timestamp should be in ISO 8601 format.
       The way, frequency and retaining of the insights can be different for each user, it's about personalization.
       
+      Current insights are the current state of the user - mostly about right now or today.
+      Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
+
+      Overtime distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
+      Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
+      Timestamps provide important contexts too.
+      
       Response should be just a JSON object with the following format:
       {
          "facts": Object,
-         "current_insights": {thought:string, behaviour?:string, useful_information?:string timestamp:string}[],
-         "previous_insights": {thought:string, behaviour?:string, useful_information?:string timestamp:string}[]
+         "current_insights": {thought:string, behaviour_and_emotion?:string, useful_information?:string timestamp:string}[],
+         "previous_insights": {thought:string, behaviour_and_emotion?:string, useful_information?:string timestamp:string}[]
       }
       `,
     },
@@ -88,7 +92,7 @@ async function generateInsights(content: string, user: User, previousInsights?: 
         role: "user",
         content: `${prevInsightText}
         Currently said:${content}. 
-        This is the conversation with the user.
+        This is the conversation with the user, use conversation context from "current insights" if needed using timestamps and topics.
         
         Update facts, previous/current insights as needed.
         Current Time: ${new Date().toISOString()}
