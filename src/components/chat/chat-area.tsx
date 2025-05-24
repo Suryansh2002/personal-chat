@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from "@/hooks/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MarkdownRenderer } from "../ui/markdown";
+import { toast } from "sonner";
 
 interface Message {
   id: string;
@@ -85,8 +86,8 @@ export function ChatArea() {
         prevMessages: messages
       }
     }).then((res) => {
-      if (res.error) {
-        console.error(res.error);
+      if (res.data.error) {
+        toast.error(res.data.error);
         return;
       }
       setMessages((msgs) => [...msgs, res.data]);

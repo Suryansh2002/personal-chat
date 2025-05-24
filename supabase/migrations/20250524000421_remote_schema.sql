@@ -131,9 +131,9 @@ ALTER TABLE ONLY "public"."chat"
 
 
 
-CREATE POLICY "Users can insert their own chats" ON "public"."chat" FOR INSERT WITH CHECK ((NOT (EXISTS ( SELECT 1
+CREATE POLICY "Users can insert their own chats" ON "public"."chat" FOR INSERT WITH CHECK (((NOT (EXISTS ( SELECT 1
    FROM "public"."chat" "c"
-  WHERE (("c"."chat_id" = "c"."chat_id") AND ("c"."user_id" <> "c"."user_id"))))));
+  WHERE (("c"."chat_id" = "chat"."chat_id") AND ("c"."user_id" <> "chat"."user_id"))))) AND ("auth"."uid"() = "user_id")));
 
 
 
@@ -144,9 +144,9 @@ CREATE POLICY "Users can view their own chats" ON "public"."chat" FOR SELECT USI
 ALTER TABLE "public"."chat" ENABLE ROW LEVEL SECURITY;
 
 
-CREATE POLICY "limit" ON "public"."chat" FOR SELECT USING (((( SELECT "count"(*) AS "count"
+CREATE POLICY "limit on insert" ON "public"."chat" FOR INSERT WITH CHECK ((((( SELECT "count"(*) AS "count"
    FROM "public"."chat" "c"
-  WHERE ("c"."user_id" = "c"."user_id")) < 100) OR ("user_id" = '51bf297e-fe8c-45de-9945-9b62a0a50e83'::"uuid")));
+  WHERE ("c"."user_id" = "chat"."user_id")) < 50) OR ("user_id" = 'df824b56-d474-456e-bd71-2a44fa4248d5'::"uuid")) AND ("auth"."uid"() = "user_id")));
 
 
 

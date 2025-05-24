@@ -40,7 +40,11 @@ Deno.serve(async (req) => {
     );
   }
 
-  return await handleRequest({req, user})
+  if (req.url.endsWith("/generate-insights")) {
+    return await handleGenerateInsights({req});
+  }
+
+  return await handleCompletion({req, user})
 });
 
 async function generateInsights(content: string, user: User, previousInsights?: string) {
@@ -93,13 +97,40 @@ async function generateInsights(content: string, user: User, previousInsights?: 
 }
 
 
-async function handleRequest({req, user}:{req:Request, user:User}){
+async function handleGenerateInsights({req}:{req:Request}) {
+  const authHeader = req.headers.get('Authorization')!;
+  const token = authHeader.replace('Bearer ', '');
+  const {data:{user}} = await supabase.auth.getUser(token);
+  if (user === null) {
+    throw new Error("Unauthorized");
+  }
+  const profileData = await supabase.from("profile").select().eq("user_id", user.id).single();
+  const { content } = await req.json();
+  
+  if (!content) {
+    throw new Error("Content is required");
+  }
+
+  await generateInsights(content, user, profileData.data?.insight);
+  return new Response(
+    JSON.stringify({ message: "Insights generated" }),
+    {
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+      },
+      status: 200
+    }
+  );
+}
+
+async function handleCompletion({req, user}:{req:Request, user:User}){
   const profileData = await supabase.from("profile").select().eq("user_id", user.id).single();
   
   const messages: Message[] = [
     { 
       role: "system",
-      content: `You are a help assistant and a companion to help the user in life and help them grow. You talk like a human companion`
+      content: `You are a help assistant and a companion to help the user in life and help them grow.`
     }
   ]
   if (profileData.data) {
@@ -112,6 +143,26 @@ async function handleRequest({req, user}:{req:Request, user:User}){
   const { content, chat_id, prevMessages }:{prevMessages:Message[], content:string, chat_id:string} = await req.json();
   messages.push(...prevMessages)
 
+  // count the number of chats from user
+  const { data: chatCount } = await supabase
+    .from("chat")
+    .select("*", { count: "exact" })
+    .eq("user_id", user.id)
+    .eq("role", "user");
+
+  if ((chatCount !== null) && (user.id != "df824b56-d474-456e-bd71-2a44fa4248d5") && (chatCount.length > 50)) {
+    return new Response(
+      JSON.stringify({ error: "Chat limit exceeded" }),
+      {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+        }
+      }
+    );
+  }
+
   let data = await supabase.from("chat").insert({
     chat_id,
     user_id: user.id,
@@ -123,7 +174,11 @@ async function handleRequest({req, user}:{req:Request, user:User}){
     throw new Error("Failed to insert user message");
   }
 
-  const genPromise = generateInsights(content, user, profileData.data?.insight)
+  fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/ai/generate-insights`, {
+    method: "POST",
+    headers: req.headers,
+    body: JSON.stringify({content})
+  })
 
   const response = await openai.responses.create({
     model: "gpt-4.1-mini",
@@ -143,8 +198,6 @@ async function handleRequest({req, user}:{req:Request, user:User}){
     throw new Error("Failed to insert ai message");
   }
 
-
-  await genPromise;
   return new Response(
     JSON.stringify({
       id: data.data[0].id,
