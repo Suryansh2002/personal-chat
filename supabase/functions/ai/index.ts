@@ -65,7 +65,7 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       Retain as much facts as possible.
       
       Current insights are the current state of the user - mostly about right now or today.
-      Previous insights are the previous state of the user - distilled insights mostly about weeks, month.
+      Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
 
       Insights can be thoughts, feelings , behaviors or information that the user has expressed in the text.
       Insights should always have a timestamp, The timestamp should be in ISO 8601 format.
@@ -90,8 +90,7 @@ async function generateInsights(content: string, user: User, previousInsights?: 
         Currently said:${content}. 
         This is the conversation with the user.
         
-        Generate insights using previous insights and currently said.
-        Update the previous/current insights as needed, remove less informational or obsolete insights.
+        Update facts, previous/current insights as needed.
         Current Time: ${new Date().toISOString()}
 
         Response should be JSON object with no other text.

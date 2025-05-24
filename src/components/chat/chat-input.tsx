@@ -24,12 +24,6 @@ export function ChatInput({ onSend, disabled }: { onSend?: (message: string) => 
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
 
   return (
     <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 pb-6 z-20">
@@ -40,7 +34,6 @@ export function ChatInput({ onSend, disabled }: { onSend?: (message: string) => 
           rows={1}
           value={message}
           onChange={handleInput}
-          onKeyDown={handleKeyDown}
           placeholder="Type your message..."
           disabled={disabled}
         />
