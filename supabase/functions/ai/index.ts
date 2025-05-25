@@ -80,7 +80,7 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       If older insights are still relevant, they can be kept in current insights, else they should be moved to previous insights.
       Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
 
-      Overtime distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
+      Distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
       Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
       Very old and non-relevant insights can be removed if they are not useful anymore in a long term.
       Timestamps provide important contexts too.
