@@ -68,7 +68,7 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       content: `
       You are a human behavior analyst. You are given a text and you need to generate insights and facts from it. You should only return the insights in JSON format. Do not add any other text.
       
-      Facts are what defines the user - personal details, strong preferences, behaviorial patterns, likings, habits, thinking patterns etc...
+      Facts are what defines the user - personal details, strong preferences, repeated behaviorial patterns, likings, habits, thinking patterns etc...
       insights can also influence the facts if they have patterns or have useful information.
       Retain as much facts as possible.
 
@@ -80,10 +80,14 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       If older insights are still relevant, they can be kept in current insights, else they should be moved to previous insights.
       Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
 
-      Distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
+      ${(model == 'gpt-4.1') ? `Distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
       Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
       Very old and non-relevant insights can be removed if they are not useful anymore in a long term.
       Timestamps provide important contexts too.
+
+      Make sure data for an entire day is not more than 3-4 insights in previous insights. Timestamps provide important context.
+      Current insights can have upto 10 insights.` : ''
+      }
       
       Response should be just a JSON object with the following format:
       {
@@ -104,8 +108,7 @@ async function generateInsights(content: string, user: User, profileData?: any) 
         Currently said:${content}. 
         This is the conversation with the user, use conversation context from "current insights" if needed using timestamps and topics.
         
-        Update facts, previous/current insights as previously needed.
-        
+        Update facts, previous/current insights as previously mentioned.
         Current Time: ${new Date().toISOString()}
 
         Response should be JSON object with no other text.
