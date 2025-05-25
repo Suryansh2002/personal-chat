@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { corsHeaders } from "../_shared/cors.ts";
 import { createClient, User } from "jsr:@supabase/supabase-js"
@@ -47,12 +48,19 @@ Deno.serve(async (req) => {
   return await handleCompletion({req, user})
 });
 
-async function generateInsights(content: string, user: User, previousInsights?: string) {
+async function generateInsights(content: string, user: User, profileData?: any) {
+  let model: "gpt-4.1-mini" | "gpt-4.1" = "gpt-4.1-mini";
+  let count = profileData?.count || 0;
   let prevInsightText = "";
-  if (previousInsights) {
-    prevInsightText = `Previous Insights: ${previousInsights}\n`;
+
+  if (profileData?.insight) {
+    prevInsightText = `Previous Insights: ${profileData?.insight}\n`;
   }
-  
+  if (profileData?.count >= 4){
+    model = "gpt-4.1";
+    count = 0;
+  }
+  count ++;
 
   const messages: Message[] = [
     {
@@ -87,7 +95,7 @@ async function generateInsights(content: string, user: User, previousInsights?: 
     },
   ]
   const response = await openai.responses.create({
-    model: "gpt-4.1-mini",
+    model: model,
     input: [
       ...messages,
       {
@@ -105,8 +113,7 @@ async function generateInsights(content: string, user: User, previousInsights?: 
       },
     ]
   })
-  await supabase.from("profile").upsert({user_id: user.id, insight: response.output_text});
-  console.log(response.output_text);
+  await supabase.from("profile").upsert({count, user_id: user.id, insight: response.output_text});
 }
 
 
@@ -124,7 +131,7 @@ async function handleGenerateInsights({req}:{req:Request}) {
     throw new Error("Content is required");
   }
 
-  await generateInsights(content, user, profileData.data?.insight);
+  await generateInsights(content, user, profileData.data);
   return new Response(
     JSON.stringify({ message: "Insights generated" }),
     {
