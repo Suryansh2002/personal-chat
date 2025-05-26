@@ -75,10 +75,8 @@ export function ChatArea() {
       params.set("id", newUuid);
       router.replace(`?${params.toString()}`);
     }
-    setMessages((msgs) => [
-      ...msgs,
-      { id: uuidv4(), content: text, role: "user" }
-    ]);
+    const updatedMessages: Message[] = [...messages, { id: uuidv4(), content: text, role: "user" }];
+    setMessages(updatedMessages);
     supabase.functions.invoke("ai", {
       body: {
         chat_id: newUuid,
@@ -97,7 +95,7 @@ export function ChatArea() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] max-h-[calc(100dvh-120px)] w-full max-w-4xl pt-6 pb-32 px-2 md:px-0">
+    <div className="flex flex-col  w-full max-w-4xl pt-6 pb-32 px-2 md:px-0">
       {messages.map((msg) => (
         <div
           key={msg.id}
