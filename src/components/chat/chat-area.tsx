@@ -88,7 +88,8 @@ export function ChatArea() {
         toast.error(res.data.error);
         return;
       }
-      setMessages((msgs) => [...msgs, res.data]);
+      updatedMessages.push(res.data);
+      setMessages(updatedMessages);
     })
     .catch((err) => console.error(err))
     .finally(() => setPending(false));
