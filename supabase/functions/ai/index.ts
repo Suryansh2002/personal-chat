@@ -85,15 +85,17 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       Very old and non-relevant insights can be removed if they are not useful anymore in a long term.
       Timestamps provide important contexts too.
 
-      Make sure data for an entire day is not more than 3-4 insights in previous insights. Timestamps provide important context.
-      Current insights can have upto 10 insights.` : ''
+      Make sure data for an entire day is not more than 3-4 insights in previous insights.
+      Current insights can have upto 10 insights.
+      Timestamps provide important context.
+      ` : ''
       }
       
       Response should be just a JSON object with the following format:
       {
          "facts": Object,
-         "current_insights": {thought:string, behaviour_and_emotion?:string, useful_information?:string timestamp:string}[],
-         "previous_insights": {thought:string, behaviour_and_emotion?:string, useful_information?:string timestamp:string}[]
+         "current_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string[]}[],
+         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string}[]
       }
       `,
     },
