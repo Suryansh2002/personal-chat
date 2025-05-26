@@ -95,7 +95,7 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       {
          "facts": Object,
          "current_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string[]}[],
-         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string}[]
+         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string[]}[]
       }
       `,
     },
