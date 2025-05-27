@@ -94,8 +94,8 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       Response should be just a JSON object with the following format:
       {
          "facts": Object,
-         "current_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string[]}[],
-         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, keywords?:string[]}[]
+         "current_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, topics_keywords?:string[]}[],
+         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, topics_keywords?:string[]}[]
       }
       `,
     },
