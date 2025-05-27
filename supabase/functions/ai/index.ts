@@ -80,12 +80,12 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       If older insights are still relevant, they can be kept in current insights, else they should be moved to previous insights.
       Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
 
-      ${(model == 'gpt-4.1') ? `Distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on keywords.
+      ${(model == 'gpt-4.1') ? `Distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on topics of conversation.
       Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
       Very old and non-relevant insights can be removed if they are not useful anymore in a long term.
       Timestamps provide important contexts too.
 
-      Make sure data for an entire day is not more than 3-4 insights in previous insights.
+      Make sure data for a particular day is not more than 3-4 insights in previous insights.
       Current insights can have upto 10 insights.
       Timestamps provide important context.
       ` : ''
