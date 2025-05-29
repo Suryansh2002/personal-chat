@@ -78,7 +78,7 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       
       Current insights are the current state of the user - mostly insights about right now or today.
       If older insights are still relevant, they can be kept in current insights, else they should be moved to previous insights.
-      Previous insights are the previous state of the user - distilled insights mostly about weeks, months.
+      Previous insights are the previous state of the user - distilled insights mostly about days, weeks, months.
 
       ${(model == 'gpt-4.1') ? `Distill,summarize,merge similar older insights to one bigger insight to make them more useful, Focus on topics of conversation.
       Merging and distilling should be done to keep important information and remove the noise. No important information should be lost.
@@ -87,15 +87,15 @@ async function generateInsights(content: string, user: User, profileData?: any) 
 
       Make sure data for a particular day is not more than 3-4 insights in previous insights.
       Current insights can have upto 10 insights.
-      Timestamps provide important context.
+      Timestamps tell which insight belongs to which day.
       ` : ''
       }
       
       Response should be just a JSON object with the following format:
       {
          "facts": Object,
-         "current_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, topics_keywords?:string[]}[],
-         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, topics_keywords?:string[]}[]
+         "current_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, topics_discussed?:string[]}[],
+         "previous_insights": {thought:string, timestamp:string, behaviour_and_emotion?:string, useful_information?:string, topics_discussed?:string[]}[]
       }
       `,
     },
