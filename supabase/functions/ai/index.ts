@@ -71,6 +71,7 @@ async function generateInsights(content: string, user: User, profileData?: any) 
       Facts are what defines the user - personal details, strong preferences, repeated behaviorial patterns, likings, habits, thinking patterns etc...
       insights can also influence the facts if they have patterns or have useful information.
       Retain as much facts as possible.
+      Facts should be relevant and define the user overall.
 
       Insights can be thoughts, feelings , behaviors or information that the user has expressed in the text.
       Insights should always have a timestamp, The timestamp should be in ISO 8601 format.
