@@ -8,7 +8,7 @@ export default function ChatPage() {
             <NewChat />
             <Profile />
         </nav>
-        <div className="pt-18 w-full h-[calc(100vh-140px)] max-h-[calc(100dvh-140px)] flex justify-center overflow-y-auto no-scrollbar">
+        <div className="w-full mt-16 h-[calc(100vh-60px)] flex justify-center overflow-y-auto no-scrollbar">
             <Suspense>
                 <ChatArea />
             </Suspense>

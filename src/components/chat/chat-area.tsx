@@ -96,7 +96,7 @@ export function ChatArea() {
   };
 
   return (
-    <div className="flex flex-col  w-full max-w-4xl pt-6 pb-32 px-2 md:px-0">
+    <div className="flex flex-col w-full max-w-4xl pt-3 pb-32 px-2 md:px-0">
       {messages.map((msg) => (
         <div
           key={msg.id}
@@ -120,7 +120,7 @@ export function ChatArea() {
           </div>
         </div>
       )}
-      <div ref={messagesEndRef} />
+      <div ref={messagesEndRef} className="pt-24" />
       <ChatInput onSend={handleSend} disabled={pending}/>
     </div>
   );
