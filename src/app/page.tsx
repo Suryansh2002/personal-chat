@@ -24,7 +24,7 @@ export default function Home() {
     }
   },[])
   return (
-    <main className="h-full">
+    <main className="h-full flex items-center justify-center">
       {loginOpen && <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />}
       {signupOpen && <SignupModal open={signupOpen} onClose={() => setSignupOpen(false)} />}
       <div className="relative z-10 w-full flex flex-col items-center px-4">
