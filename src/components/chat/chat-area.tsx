@@ -71,10 +71,6 @@ export function ChatArea() {
     if (!text.trim()) return;
     setPending(true);
     const newUuid = chatId || uuidv4();
-    if (chatId !== newUuid) {
-      params.set("id", newUuid);
-      router.replace(`?${params.toString()}`);
-    }
     const updatedMessages: Message[] = [...messages, { id: uuidv4(), content: text, role: "user" }];
     setMessages(updatedMessages);
     supabase.functions.invoke("ai", {
@@ -92,7 +88,13 @@ export function ChatArea() {
       setMessages(updatedMessages);
     })
     .catch((err) => console.error(err))
-    .finally(() => setPending(false));
+    .finally(() => {
+      setPending(false);
+      if (chatId !== newUuid) {
+        params.set("id", newUuid);
+        router.replace(`?${params.toString()}`);
+      }
+    });
   };
 
   return (
