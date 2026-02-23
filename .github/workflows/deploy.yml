@@ -31,7 +31,7 @@ jobs:
           version: 8
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile --force
 
       - name: Build and export static site
         run: |
